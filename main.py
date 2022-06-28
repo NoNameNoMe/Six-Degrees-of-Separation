@@ -27,15 +27,18 @@ def work(depth, start_url, end_url, times, visited, path):
         return 0
     else:
         visited.append(start_url)
-        url_que = LifoQueue()
+        # que = LifoQueue()
+        que = Queue()
         path[depth] = start_url
-        if parse(start_url, end_url, url_que, times) == 1:
+        if parse(start_url, end_url, que, times) == 1:
+            if depth < 5:
+                path[depth + 1] = end_url
             return 1
         else:
-            if depth <= 4:
+            if depth < 5:
                 depth += 1
-                for i in range(0, url_que.qsize()):
-                    if work(depth, url_que.get(), end_url, times, visited, path) == 1:
+                for i in range(0, que.qsize()):
+                    if work(depth, que.get(), end_url, times, visited, path) == 1:
                         return 1
             return 0
 
@@ -50,6 +53,8 @@ if __name__ == '__main__':
         print("NOT FIND!")
     else:
         for url in path:
-            if url != '':
-                print(url + " --> ")
+            if url != end_url:
+                print(url + " => ")
+            else:
+                break
         print(end_url)
